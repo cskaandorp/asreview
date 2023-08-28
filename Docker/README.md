@@ -33,9 +33,13 @@ In the `auth_verified` folder you find 6 files:
 
 If you would like to use or try out [SendGrid](https://sendgrid.com/), go to their website, create an account and sign in. Once signed in, click on "Email API" in the menu and subsequently click on the "Integration Guide" link. Then, choose "SMTP Relay", create an API key and copy the resulting settings (Server, Ports, Username and Password) in your `flask_config.toml` file. The final step would be verification, but that is only possible after building the Docker containers.
 
+### Gunicorn and NGINX workers
+
+As written, the backend is served by Gunicorn. Gunicorn spawns a number of child processes called workers that handle incoming HTTP requests. The amount of workers is configurable in the `Dockerfile_backend` in the ENTRYPOINT command at the end of the file. This number is set to 2, but change this if desired. Changing the amount of NGINX workers is possible, but requires more configuration which we will ignore.
+
 ### Ports
 
-Before we discuss how to create the Docker containers a quick word on ports. The backend container runs our Flask backend, with Gunicorn, on internal port 5001. This port is bridged to port 5013 on the outside to avoid confusion. Thus, if you would like to access the backend directly in your browser (or via wget or curl), make a request to port 5013. This external port number can be changed in the `docker-compose.yml` file. If you do so, do not forget to change it under the "API_URL" key under "frontend" as well! If you would like to change the internal port number (5001), change it in the `docker-compose.yml`, but also in the "ENTRYPOINT" line in the `Dockerfile_backend` file.\
+The backend container runs our Flask backend, with Gunicorn, on internal port 5001. This port is bridged to port 5013 on the outside of the container to avoid confusion. Thus, if you would like to access the backend directly in your browser (or via wget or curl), make a request to port 5013. This external port number can be changed in the `docker-compose.yml` file. If you do so, do not forget to change it under the "API_URL" key under "frontend" as well! If you would like to change the internal port number (5001), change it in the `docker-compose.yml`, but also in the "ENTRYPOINT" line in the `Dockerfile_backend` file.\
 The frontend listens internally to port 80. This is bridged externally to port 8080 to, again, avoid confusion. We suggest to not change port 80, but if you would like to alter port 8080 make sure you do so in the `docker-compose.yml` file, but also in the flask_config.toml file under the "ALLOWED_ORIGINS" key.
 
 ### Creating and running the containers

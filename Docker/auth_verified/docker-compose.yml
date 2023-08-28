@@ -6,7 +6,7 @@ services:
       context: ../../
       dockerfile: ./Docker/auth_verified/Dockerfile_backend
     ports:
-      - "127.0.0.1:5013:5013"
+      - "127.0.0.1:5013:5001"
 
   frontend:
     build:

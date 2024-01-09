@@ -1494,6 +1494,13 @@ def api_classify_instance(project, doc_id):  # noqa: F401
 
     if request.method == "POST":
         with open_state(project.project_path, read_only=False) as state:
+
+            # user id
+            if current_app.config.get('LOGIN_DISABLED'):
+                user_id = None
+            else:
+                user_id = current_user.id
+
             # add the labels as prior data
             state.add_labeling_data(
                 record_ids=[record_id],
@@ -1501,6 +1508,7 @@ def api_classify_instance(project, doc_id):  # noqa: F401
                 notes=[note],
                 tags_list=[tags],
                 prior=prior,
+                user_id=user_id
             )
 
     elif request.method == "PUT":

@@ -184,7 +184,8 @@ class SQLiteState(BaseState):
                                 training_set INTEGER,
                                 labeling_time INTEGER,
                                 notes TEXT,
-                                custom_metadata_json TEXT)"""
+                                custom_metadata_json TEXT,
+                                user_id INTEGER)"""
             )
 
             # Create the record table.
@@ -616,7 +617,8 @@ class SQLiteState(BaseState):
         con.close()
 
     def add_labeling_data(
-        self, record_ids, labels, notes=None, tags_list=None, prior=False
+        self, record_ids, labels, notes=None, tags_list=None, prior=False,
+        user_id=None
     ):
         """Add the data corresponding to a labeling action to the state file.
 
@@ -632,6 +634,8 @@ class SQLiteState(BaseState):
             A list of tags to save with the labeled records.
         prior: bool
             Whether the added record are prior knowledge.
+        user_id: int
+            ID of user in an authenticated version.
         """
 
         # Check if the state is still valid.
@@ -683,8 +687,9 @@ class SQLiteState(BaseState):
             # If prior, we need to insert new records into the database.
             query = (
                 "INSERT INTO results (record_id, label, query_strategy, "
-                "training_set, labeling_time, notes, custom_metadata_json) "
-                "VALUES (?, ?, ?, ?, ?, ?, ?)"
+                "training_set, labeling_time, notes, custom_metadata_json, "
+                "user_id)"
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
             )
 
         else:
@@ -700,7 +705,9 @@ class SQLiteState(BaseState):
                     labeling_times[i],
                     notes[i],
                     custom_metadata_list[i],
-                    int(record_ids[i]),
+                    user_id,
+                    int(record_ids[i])
+                    
                 )
                 for i in range(n_records_labeled)
             ]
@@ -708,8 +715,10 @@ class SQLiteState(BaseState):
             # If not prior, we need to update records.
             query = (
                 "UPDATE results SET label=?, labeling_time=?, "
-                "notes=?, custom_metadata_json=? WHERE record_id=?"
+                "notes=?, custom_metadata_json=?, user_id=? WHERE record_id=?"
             )
+
+        print(query, data)
 
         # Add the rows to the database.
         con = self._connect_to_sql()

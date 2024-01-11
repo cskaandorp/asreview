@@ -206,7 +206,7 @@ const ProfilePopper = (props) => {
                   </ListItemText>
                 </MenuItem>
 
-                {false && allowTeams && (
+                {allowTeams && (
                   <MenuItem onClick={openAcceptanceDialog}>
                     <ListItemIcon>
                       <GroupAdd fontSize="small" />

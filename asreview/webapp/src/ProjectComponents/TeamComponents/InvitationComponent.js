@@ -7,8 +7,11 @@ import { Add } from "@mui/icons-material";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import UserListEntry from "./UserListEntry";
-import { Box, Fab, Stack } from "@mui/material";
+import { Card, Box, Fab, Stack } from "@mui/material";
+import CardContent from '@mui/material/CardContent';
 import { ConfirmationDialog } from ".";
+import { Root } from '../ReviewComponents/RecordCard.js';
+
 
 const InvitationContents = (props) => {
   const [selectedUser, setSelectedUser] = React.useState(null);
@@ -109,8 +112,10 @@ const InvitationContents = (props) => {
   };
 
   return (
-    <>
-      <Box>
+    <Root>
+    <Card elevation={2}>
+      <CardContent>
+      <Box sx={{ minWidth: "712px" }}>
         <Box>
           <h2>Invite</h2>
           <Autocomplete
@@ -187,7 +192,9 @@ const InvitationContents = (props) => {
         handleCancel={handleCloseConfirmationDialog}
         handleConfirm={removeCollaborator}
       />
-    </>
+      </CardContent>
+    </Card>
+    </Root>
   );
 };
 

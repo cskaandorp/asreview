@@ -276,3 +276,4 @@ const RecordCard = (props) => {
 };
 
 export default RecordCard;
+export {Root};

@@ -1,0 +1,11 @@
+services:
+  vectorizer:
+    build: .
+    container_name: asreview-vectorizer
+    restart: unless-stopped
+    env_file:
+      - .env
+    extra_hosts:
+      # Lets the container reach the host (where Supabase is running) via
+      # `host.docker.internal`. Required on Linux; harmless on Mac/Windows.
+      - "host.docker.internal:host-gateway"
